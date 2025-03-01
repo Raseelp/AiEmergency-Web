@@ -1,0 +1,164 @@
+{#{% extends 'admin/index.html' %}#}
+{#{% block body%}#}
+{##}
+{#<body>#}
+{##}
+{#<form action="/admin_add_hospital_post" method="post" enctype="multipart/form-data" name="form1" id="form1">#}
+{#<table width="342" border="1">#}
+{#  <tr>#}
+{#    <td>Name</td>#}
+{#    <td><label>#}
+{#      <input type="text" name="textfield" />#}
+{#    </label></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Image</td>#}
+{#    <td><label>#}
+{#      <input type="file" name="file" />#}
+{#    </label></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Place</td>#}
+{#    <td><label for="label"></label>#}
+{#      <input type="text" name="textfield6" id="label" />      <label></label></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Pin</td>#}
+{#    <td><label>#}
+{#      <input type="text" name="textfield2" />#}
+{#    </label></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Post</td>#}
+{#    <td><label>#}
+{#      <input type="text" name="textfield3" />#}
+{#    </label></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Email</td>#}
+{#    <td><label>#}
+{#      <input type="text" name="textfield4" />#}
+{#    </label></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Contact one </td>#}
+{#    <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield5" id="textfield" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Contact Two </td>#}
+{#    <td><label for="label2"></label>#}
+{#      <input type="text" name="textfield7" id="label2" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Latitude</td>#}
+{#    <td><label for="label3"></label>#}
+{#      <input type="text" name="textfield8" id="label3" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Longitude</td>#}
+{#    <td><label for="label4"></label>#}
+{#      <input type="text" name="textfield9" id="label4" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Username</td>#}
+{#    <td><label for="label5"></label>#}
+{#      <input type="text" name="textfield10" id="label5" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Password</td>#}
+{#    <td><label for="label6"></label>#}
+{#      <input type="password" name="textfield11" id="label6" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td colspan="2"><label for="Submit"></label>#}
+{#      <div align="center">#}
+{#        <input type="submit" name="Submit" value="ADD" id="Submit" />#}
+{#      </div></td>#}
+{#  </tr>#}
+{#</table>#}
+{#  #}
+{#</form>#}
+{#</body>#}
+{#{% endblock %}#}
+{##}
+
+{% extends 'admin/index.html' %}
+{% block body %}
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header text-center">
+        <h4>Add New Hospital</h4>
+      </div>
+      <div class="card-body">
+        <form action="/admin_add_hospital_post" method="post" enctype="multipart/form-data" name="form1" id="form1">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" name="textfield" id="name" placeholder="Enter hospital name" required pattern="[A-Z a-z.]{3,25} ">
+          </div>
+
+          <div class="mb-3">
+            <label for="image" class="form-label">Image</label>
+            <input type="file" class="form-control" name="file" id="image" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="place" class="form-label">Place</label>
+            <input type="text" class="form-control" name="textfield6" id="place" placeholder="Enter place" required pattern="[A-Z a-z.]{3,25}">
+          </div>
+
+          <div class="mb-3">
+            <label for="pin" class="form-label">Pin</label>
+            <input type="text" class="form-control" name="textfield2" id="pin" placeholder="Enter PIN code" required pattern="[0-9]{6}">
+          </div>
+
+          <div class="mb-3">
+            <label for="post" class="form-label">Post</label>
+            <input type="text" class="form-control" name="textfield3" id="post" placeholder="Enter post" required pattern="[A-Z a-z.]{3,25}>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" name="textfield4" id="email" placeholder="Enter email address" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}">
+          </div>
+
+          <div class="mb-3">
+            <label for="contact1" class="form-label">Contact One</label>
+            <input type="text" class="form-control" name="textfield5" id="contact1" placeholder="Enter primary contact number" required pattern="[0-9]{6}" >
+          </div>
+
+          <div class="mb-3">
+            <label for="contact2" class="form-label">Contact Two</label>
+            <input type="text" class="form-control" name="textfield7" id="contact2" placeholder="Enter secondary contact number" required pattern="[0-9]{6}">
+          </div>
+
+          <div class="mb-3">
+            <label for="latitude" class="form-label">Latitude</label>
+            <input type="text" class="form-control" name="textfield8" id="latitude" placeholder="Enter latitude" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="longitude" class="form-label">Longitude</label>
+            <input type="text" class="form-control" name="textfield9" id="longitude" placeholder="Enter longitude" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" name="textfield10" id="username" placeholder="Enter username" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="textfield11" id="password" placeholder="Enter password" required>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Add Hospital</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}

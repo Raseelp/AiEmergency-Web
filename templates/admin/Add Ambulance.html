@@ -1,0 +1,42 @@
+{% extends 'admin/index.html' %}
+{% block body %}
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header text-center">
+        <h4>Add New Vehicle</h4>
+      </div>
+      <div class="card-body">
+        <form action="" method="get">
+          <div class="mb-3">
+            <label for="vehicleNo" class="form-label">Vehicle Number</label>
+            <input type="text" class="form-control" name="textfield" id="vehicleNo" placeholder="Enter vehicle number" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="type" class="form-label">Type</label>
+            <input type="text" class="form-control" name="textfield2" id="type" placeholder="Enter vehicle type" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="hospital" class="form-label">Hospital</label>
+            <select class="form-select" name="select" id="hospital" required>
+              <option value="" selected disabled>Select a hospital</option>
+              <!-- Add options dynamically -->
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <input type="text" class="form-control" name="textfield3" id="status" placeholder="Enter vehicle status" required>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}

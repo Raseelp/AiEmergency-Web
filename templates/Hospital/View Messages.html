@@ -1,0 +1,38 @@
+{# Messages coming from users at the location of the accident #}
+{% extends 'Hospital/index.html' %}
+{% block body %}
+<section class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white text-center">
+      <h3>Emergency Messages</h3>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark text-center">
+            <tr>
+              <th scope="col">Serial No</th>
+              <th scope="col">Message</th>
+              <th scope="col">Location</th>
+              <th scope="col">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in data %}
+            <tr>
+              <th scope="row" class="text-center">{{ forloop.counter }}</th>
+              <td>{{ i.EmergencyMessage }}</td>
+              <td>
+                Latitude: {{ i.Latitude }}<br>
+                Longitude: {{ i.Longitude }}
+              </td>
+              <td>{{ i.Time }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

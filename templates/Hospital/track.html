@@ -1,0 +1,74 @@
+
+{% extends 'Hospital/index.html' %}
+{% block body %}
+<body>
+<style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .map-container {
+            margin-top: 20px;
+        }
+        .map-container img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            border: 1px solid #ddd;
+        }
+    </style>
+    <h1>Tracked Locations</h1>
+
+    <!-- Table of locations -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Latitude & Longitude</th>
+                <th>Tracked By</th>
+                <th>Location Map</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ details.id }}</td>
+                <td>{{ details.Latitude }}, {{ details.Longitude }}</td>
+                <td>{{ details.LOGIN.username }}</td>
+               <td>
+    <div class="map-container">
+        <a
+            href="https://maps.google.com/maps?q={{ details.Latitude }},{{ details.Longitude }}"
+            target="_blank">
+            Track
+        </a>
+    </div>
+</td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+{% endblock %}
+
+

@@ -1,0 +1,104 @@
+{#{% extends 'admin/index.html' %}#}
+{#{% block body %}#}
+{#<body>#}
+{#<form id="form1" name="form1" method="post" action="">#}
+{#  <table width="486" border="1">#}
+{#    <tr>#}
+{#      <th colspan="6" scope="row">Vehicle Number #}
+{#        <label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" />#}
+{#      <label for="Submit"></label>#}
+{#      <input type="submit" name="Submit" value="Go" id="Submit" /></th>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th width="80" scope="row">Serial No </th>#}
+{#      <td width="123">Vehicle Number </td>#}
+{#      <td width="38">Type</td>#}
+{#      <td width="60">Hospital</td>#}
+{#      <td width="38">Status</td>#}
+{#      <td width="107">&nbsp;</td>#}
+{#    </tr>#}
+{#      {% for i in data %}#}
+{#    <tr>#}
+{#      <th scope="row">{{ forloop.counter }}&nbsp;</th>#}
+{#      <td>{{ i.VehicleNumber }}&nbsp;</td>#}
+{#      <td>{{ i.Type }}&nbsp;</td>#}
+{#      <td>{{ i.Hospital.name }}&nbsp;</td>#}
+{#      <td>{{ i.Status }}&nbsp;</td>#}
+{#      <td><p><a href="/edit_ambulance/{{ i.id }}">Edit</a></p>#}
+{#      <p><a href="/delete_ambulance/{{ i.LOGIN.id }}">Delete</a></p>#}
+{#      <p><a href="/trackAmbulance/{{ i.LOGIN.id }}">Track</a></p></td>#}
+{#    </tr>#}
+{#      {% endfor %}#}
+{#    <tr>#}
+{#      <th colspan="6" scope="row"><a href="admin_add_ambulance">Add New</a></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#{% endblock %}#}
+{##}
+
+{% extends 'admin/index.html' %}
+{% block body %}
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header text-center">
+        <h4>Ambulance Management</h4>
+      </div>
+      <div class="card-body">
+        <form id="form1" name="form1" method="post" action="/admin_search_ambulance#a">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="textfield" class="form-label">Vehicle Number</label>
+              <input type="text" class="form-control" name="textfield" id="textfield" placeholder="Enter vehicle number">
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <button type="submit" class="btn btn-primary w-100" id="Submit" name="Submit">Go</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Vehicle Number</th>
+                <th scope="col">Type</th>
+                <th scope="col">Hospital</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in data %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ i.VehicleNumber }}</td>
+                <td>{{ i.Type }}</td>
+                <td>{{ i.Hospital.name }}</td>
+                <td>{{ i.Status }}</td>
+                <td>
+                  <div class="d-flex flex-column">
+                    <a href="/edit_ambulance/{{ i.id }}#a" class="btn btn-sm btn-warning mb-1">Edit</a>
+                    <a href="/delete_ambulance/{{ i.LOGIN.id }}" class="btn btn-sm btn-danger mb-1">Delete</a>
+                    <a href="/trackAmbulance/{{ i.LOGIN.id }}" class="btn btn-sm btn-info">Track</a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+{#        <div class="text-end mt-3">#}
+{#          <a href="admin_add_ambulance#a" class="btn btn-success">Add New Ambulance</a>#}
+{#        </div>#}
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
+

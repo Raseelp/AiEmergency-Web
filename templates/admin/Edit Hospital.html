@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Hospital</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4">
+            <h2 class="text-center mb-4">Edit Hospital Details</h2>
+            <form action="/edithospitalPost" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="textfield" class="form-control" value="{{ data.name }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    <input type="file" name="file" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Place</label>
+                    <input type="text" name="textfield6" class="form-control" value="{{ data.place }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Pin</label>
+                    <input type="text" name="textfield2" class="form-control" value="{{ data.pin }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Post</label>
+                    <input type="text" name="textfield3" class="form-control" value="{{ data.post }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="textfield4" class="form-control" value="{{ data.email }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contact One</label>
+                    <input type="text" name="textfield5" class="form-control" value="{{ data.contactNumberOne }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contact Two</label>
+                    <input type="text" name="textfield7" class="form-control" value="{{ data.contactNumberTwo }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Latitude</label>
+                    <input type="text" name="textfield8" class="form-control" value="{{ data.Latitude }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Longitude</label>
+                    <input type="text" name="textfield9" class="form-control" value="{{ data.Longitude }}" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

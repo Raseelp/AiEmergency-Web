@@ -1,0 +1,50 @@
+{#{% extends 'admin/index.html' %}#}
+{#{% block body%}#}
+{#<body>#}
+{#<form id="form1" name="form1" method="post" action="/admin_notification_post">#}
+{#  <table width="200" border="1">#}
+{##}
+{#    <tr>#}
+{#      <td>Notification</td>#}
+{#      <td><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <td colspan="2"><label for="Submit"></label>#}
+{#        <div align="center">#}
+{#          <input type="submit" name="Submit" value="Send" id="Submit" />#}
+{#        </div></td>#}
+{#    </tr>#}
+{#  </table>#}
+{##}
+{#</form>#}
+{#</body>#}
+{##}
+{#{% endblock %}#}
+
+
+
+{% extends 'admin/index.html' %}
+{% block body %}
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header text-center">
+        <h4>Send Notification</h4>
+      </div>
+      <div class="card-body">
+        <form id="form1" name="form1" method="post" action="/admin_notification_post#a">
+          <div class="mb-3">
+            <label for="textfield" class="form-label">Notification</label>
+            <input type="text" class="form-control" name="textfield" id="textfield" placeholder="Enter your notification here" required>
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary" id="Submit" name="Submit">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
+

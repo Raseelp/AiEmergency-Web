@@ -1,0 +1,49 @@
+{% extends 'Hospital/index.html' %}
+{% block body %}
+<section class="container mt-5">
+  <form id="form1" name="form1" method="post" action="/hospital_search_ambulance#a">
+    <div class="mb-4">
+      <h3 class="text-center">Search and Manage Ambulances</h3>
+    </div>
+    <!-- Search Section -->
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Enter Vehicle Number" name="textfield" id="textfield">
+      <button class="btn btn-primary" type="submit" name="Submit" id="Submit">Go</button>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark text-center">
+          <tr>
+            <th scope="col">Serial No</th>
+            <th scope="col">Vehicle Number</th>
+            <th scope="col">Type</th>
+            <th scope="col">Hospital</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in data %}
+          <tr>
+            <th scope="row" class="text-center">{{ forloop.counter }}</th>
+            <td>{{ i.VehicleNumber }}</td>
+            <td>{{ i.Type }}</td>
+            <td>{{ i.Hospital.name }}</td>
+            <td>{{ i.Status }}</td>
+            <td>
+              <div class="d-flex justify-content-center gap-2">
+                <a href="/edit_ambulance_hospital/{{ i.id }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="/delete_ambulance_hospital/{{ i.LOGIN.id }}" class="btn btn-sm btn-danger">Delete</a>
+                <a href="/hospital_track_ambulances/{{ i.LOGIN.id }}" class="btn btn-sm btn-info">Track</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </form>
+</section>
+{% endblock %}

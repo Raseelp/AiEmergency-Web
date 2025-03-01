@@ -1,0 +1,86 @@
+{#{% extends 'Hospital/index.html' %}#}
+{#{% block body %}#}
+{#<body>#}
+{#<form id="form1" name="form1" method="post" action="/hospital_add_ambulance_post">#}
+{#  <table width="232" border="1">#}
+{#    <tr>#}
+{#      <th width="54" scope="row">Vehicle No </th>#}
+{#      <td width="162"><label for="textfield"></label>#}
+{#      <input type="text" name="textfield" id="textfield" /></td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Type</th>#}
+{#      <td><label for="select"></label>#}
+{#        <select name="select" id="select">#}
+{#          <option>Public</option>#}
+{#            <option>Private</option>#}
+{#        </select>      </td>#}
+{#    </tr>#}
+{#    <tr>#}
+{#      <th scope="row">Status</th>#}
+{#      <td><label for="label"></label>#}
+{#        <select name="select2" id="label">#}
+{#            <option>Available</option>#}
+{#            <option>Unavailable</option>#}
+{#        </select>      </td>#}
+{#    </tr>#}
+{#       <tr>#}
+{#    <td>Username</td>#}
+{#    <td><label for="label5"></label>#}
+{#      <input type="text" name="textfield10" id="label5" /></td>#}
+{#  </tr>#}
+{#  <tr>#}
+{#    <td>Password</td>#}
+{#    <td><label for="label6"></label>#}
+{#      <input type="password" name="textfield11" id="label6" /></td>#}
+{#  </tr>#}
+{#    <tr>#}
+{#      <th colspan="2" scope="row"><label for="Submit"></label>#}
+{#        <input type="submit" name="Submit" value="Add" id="Submit" /></th>#}
+{#    </tr>#}
+{#  </table>#}
+{#</form>#}
+{#</body>#}
+{#{% endblock %}#}
+
+{% extends 'Hospital/index.html' %}
+{% block body %}
+<body>
+<div class="container mt-5">
+  <form id="form1" name="form1" method="post" action="/hospital_add_ambulance_post">
+    <div class="card shadow-lg p-4">
+      <h3 class="text-center mb-4">Add Ambulance</h3>
+      <div class="mb-3">
+        <label for="textfield" class="form-label">Vehicle No</label>
+        <input type="text" name="textfield" id="textfield" class="form-control" placeholder="Enter Vehicle Number" required />
+      </div>
+      <div class="mb-3">
+        <label for="select" class="form-label">Type</label>
+        <select name="select" id="select" class="form-select">
+          <option>Public</option>
+          <option>Private</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="label" class="form-label">Status</label>
+        <select name="select2" id="label" class="form-select">
+          <option>Available</option>
+          <option>Unavailable</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="label5" class="form-label">Username</label>
+        <input type="text" name="textfield10" id="label5" class="form-control" placeholder="Enter Username" required />
+      </div>
+      <div class="mb-3">
+        <label for="label6" class="form-label">Password</label>
+        <input type="password" name="textfield11" id="label6" class="form-control" placeholder="Enter Password" required />
+      </div>
+      <div class="text-center">
+        <button type="submit" name="Submit" id="Submit" class="btn btn-primary">Add Ambulance</button>
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+{% endblock %}

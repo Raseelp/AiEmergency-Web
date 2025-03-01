@@ -1,0 +1,36 @@
+{% extends 'admin/index.html' %}
+{% block body %}
+<body class="bg-light">
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header text-center">
+        <h4>User Feedback</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead class="table-dark text-center">
+              <tr>
+                <th scope="col">Serial No</th>
+                <th scope="col">Username</th>
+                <th scope="col">Feedback</th>
+                <th scope="col">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in data %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ i.USER_ID.name }}</td>
+                <td>{{ i.Feedback }}</td>
+                <td>{{ i.date }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+{% endblock %}
