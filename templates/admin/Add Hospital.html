@@ -100,7 +100,7 @@
 
           <div class="mb-3">
             <label for="image" class="form-label">Image</label>
-            <input type="file" class="form-control" name="file" id="image" required>
+            <input type="file" accept="image/png, image/jpeg, image/jpg" class="form-control" name="file" id="image" required pattern="accept jpeg or png">
           </div>
 
           <div class="mb-3">
@@ -150,7 +150,7 @@
 
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" name="textfield11" id="password" placeholder="Enter password" required>
+            <input type="password" class="form-control" name="textfield11" id="password" placeholder="Enter password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" >
           </div>
 
           <div class="text-center">

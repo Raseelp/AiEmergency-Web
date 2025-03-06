@@ -695,7 +695,7 @@ def ambulance_complete_request(request, request_id):
 
     try:
         ambulance_request = ambulance_request_table.objects.get(id=request_id, AMBULANCE_ID=ambulance, Status__startswith='Accepted')
-        ambulance_request.Status = 'Completed'
+        ambulance_request.Status = f'Completed by {ambulance.VehicleNumber}'
         ambulance_request.save()
 
         return JsonResponse({"status": "Completed"})
