@@ -45,6 +45,7 @@ urlpatterns = [
 
     path('logincode', views.logincode),
     path('view_nearest_ambulances', views.view_nearest_ambulances),
+    path('view_nearest_ambulances2', views.view_nearest_ambulances2),
     path('sendfeedback', views.sendfeedback),
     path('view_nearest_traffic_notifivcation', views.view_nearest_traffic_notifivcation),
     path('user_send_ambulance_request', views.user_send_ambulance_request),
@@ -57,5 +58,6 @@ urlpatterns = [
     path('accept_request/<int:request_id>/', views.ambulance_accept_request),
     path('complete_request/<int:request_id>/', views.ambulance_complete_request,),
     path('get-username/<int:lid>/', views.get_username),
+    path('delete_ambulance_request', views.delete_ambulance_request),
 
 ]

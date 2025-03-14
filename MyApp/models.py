@@ -79,6 +79,7 @@ class ambulance_request_table(models.Model):
     request=models.CharField(max_length=100)
     latitude=models.CharField(max_length=100)
     longitude=models.CharField(max_length=100)
+    deleted = models.BooleanField(default=False)
 
 
 

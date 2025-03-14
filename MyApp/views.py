@@ -385,26 +385,62 @@ def logincode(request):
 
 from django.http import JsonResponse
 from .models import ambulance_table, location_table
+from django.db import connection
+def view_nearest_ambulances2(request):
+    try:
+
+        try:
+            id = request.POST['id']
+            ambulances = ambulance_request_table.objects.filter(Status__contains='Accepted', id__gt=id).order_by('-id')
+            print("hjhhj", ambulances)
+
+            print(ambulances, "jkjkj ")
+            if len(ambulances) > 0:
+                return JsonResponse({"status": "ok", 'id': ambulances[0].id})
+            else:
+                return JsonResponse({"status": "no"})
+        except:
+            connection.close()
+            id = request.POST['id']
+            ambulances = ambulance_request_table.objects.filter(Status__contains='Accepted', id__gt=id).order_by('-id')
+            print("ggg", ambulances)
+            mdata2 = []
+
+            for ambulance in ambulances:
+                ambulance = ambulance.AMBULANCE_ID
+
+                data = {
+                    'Ambulance': ambulance.VehicleNumber + "Passing",
+                }
+                mdata2.append(data)
+            print(mdata2, "jkjkj ")
+            return JsonResponse({"status": "ok", "data2": mdata2, 'id': ambulances[0].id})
+    finally:
+        connection.close()
 
 def view_nearest_ambulances(request):
-    ambulances = ambulance_table.objects.all()
-    mdata = []
+    try:
+        ambulances = ambulance_table.objects.all()
+        mdata = []
 
-    for ambulance in ambulances:
-        location = location_table.objects.filter(LOGIN=ambulance.LOGIN).order_by('-date').first()
+        for ambulance in ambulances:
+            location = location_table.objects.filter(LOGIN=ambulance.LOGIN).order_by('-date').first()
 
-        data = {
-            'Ambulance': ambulance.VehicleNumber,
-            'Hospital': ambulance.Hospital.name,
-            'Type': ambulance.Type,
-            'Status': ambulance.Status,
-            'id': ambulance.id,
-            'Latitude': str(location.Latitude) if location else None,
-            'Longitude': str(location.Longitude) if location else None,
-        }
-        mdata.append(data)
+            data = {
+                'Ambulance': ambulance.VehicleNumber,
+                'Hospital': ambulance.Hospital.name,
+                'Type': ambulance.Type,
+                'Status': ambulance.Status,
+                'id': ambulance.id,
+                'Latitude': str(location.Latitude) if location else None,
+                'Longitude': str(location.Longitude) if location else None,
+            }
+            mdata.append(data)
 
-    return JsonResponse({"status": "ok", "data": mdata})
+
+        return JsonResponse({"status": "ok", "data": mdata})
+    finally:
+        connection.close()
 
 def get_username(request, lid):
     try:
@@ -655,7 +691,7 @@ def get_ambulance_requests(request):
             # requests = ambulance_request_table.objects.filter(
             #     Q(AMBULANCE_ID__isnull=True) | Q(AMBULANCE_ID=ambulance)
             # ).values()
-            requests = ambulance_request_table.objects.all().order_by('-date').values()
+            requests = ambulance_request_table.objects.filter(deleted=False).order_by('-date').values();
             return JsonResponse({'requests': list(requests)}, status=200)
 
         # except ambulance_table.DoesNotExist:
@@ -701,3 +737,20 @@ def ambulance_complete_request(request, request_id):
         return JsonResponse({"status": "Completed"})
     except ambulance_request_table.DoesNotExist:
         return JsonResponse({"status": "Request Not Found or Already Completed"})
+
+
+def delete_ambulance_request(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            request_id = data.get('id')
+
+            # Mark the request as deleted
+            ambulance_request_table.objects.filter(id=request_id).update(deleted=True)
+
+            return JsonResponse({'message': 'Request deleted successfully'}, status=200)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
