@@ -61,7 +61,7 @@ class user_message_table(models.Model):
 
 class patient_table(models.Model):
     AMBULANCE_ID= models.ForeignKey(ambulance_table,on_delete=models.CASCADE)
-    PatientCondition = models.CharField(max_length=100)
+    PatientCondition = models.FileField(upload_to='voice_messages/', null=True, blank=True)  # Store audio files
     date=models.DateTimeField
 
 

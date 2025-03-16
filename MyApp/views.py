@@ -663,3 +663,39 @@ def delete_ambulance_request(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from .models import patient_table, ambulance_table
+
+@csrf_exempt
+def upload_voice_message(request):
+    if request.method == 'POST' and request.FILES.get('voice_message'):
+        try:
+            # Get login ID (lid) from the request
+            lid = request.POST.get('lid')
+            print(f"Received lid: {lid}")
+
+            # Find the corresponding ambulance using the login ID
+            ambulance = ambulance_table.objects.filter(LOGIN__id=lid).first()
+
+            if not ambulance:
+                return JsonResponse({'error': 'Ambulance not found for this login ID'}, status=400)
+
+            voice_file = request.FILES['voice_message']
+            file_path = default_storage.save(f'voice_messages/{voice_file.name}', voice_file)
+
+            # Create patient record linked to this ambulance
+            patient = patient_table.objects.create(
+                AMBULANCE_ID=ambulance,
+                PatientCondition=file_path
+            )
+
+            return JsonResponse({'message': 'Voice message uploaded successfully!', 'file_path': file_path}, status=201)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)

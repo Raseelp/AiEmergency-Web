@@ -59,5 +59,8 @@ urlpatterns = [
     path('complete_request/<int:request_id>/', views.ambulance_complete_request,),
     path('get-username/<int:lid>/', views.get_username),
     path('delete_ambulance_request', views.delete_ambulance_request),
+    path('upload_voice_message/',views.upload_voice_message),
+
+
 
 ]

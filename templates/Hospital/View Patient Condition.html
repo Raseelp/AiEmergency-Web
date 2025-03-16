@@ -23,7 +23,16 @@
               <th scope="row" class="text-center">{{ forloop.counter }}</th>
               <td>{{ i.AMBULANCE_ID.VehicleNumber }}</td>
               <td>{{ i.PlaceDetails }}</td>
-              <td>{{ i.PatientCondition }}</td>
+              <td>
+                {% if i.PatientCondition %}
+                  <audio controls>
+                    <source src="{{ i.PatientCondition.url }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                  </audio>
+                {% else %}
+                  No audio file available.
+                {% endif %}
+              </td>
               <td>
                 <a href="/delete_patient_info/{{ i.id }}" class="btn btn-danger btn-sm">Delete</a>
               </td>
