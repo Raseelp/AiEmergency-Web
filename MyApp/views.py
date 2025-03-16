@@ -322,9 +322,7 @@ def user_registration(request):
     name = request.POST['fname']
     PhoneNumber = request.POST['phone']
     email = request.POST['email']
-    place = request.POST['place']
-    pin = request.POST['pin']
-    post = request.POST['post']
+
     username = request.POST['uname']
     password = request.POST['password']
 
@@ -339,9 +337,7 @@ def user_registration(request):
     ob.name=name
     ob.PhoneNumber=PhoneNumber
     ob.email=email
-    ob.place=place
-    ob.pin=pin
-    ob.post=post
+
     ob.save()
     return JsonResponse({'task':'valid'})
 
@@ -442,12 +438,21 @@ def view_nearest_ambulances(request):
     finally:
         connection.close()
 
+
 def get_username(request, lid):
     try:
-        user = get_object_or_404(login_table, id=lid)  # Assuming `lid` is the ID of the user
-        return JsonResponse({'username': user.username}, status=200)
+        # Fetch the user from login_table
+        user = get_object_or_404(login_table, id=lid)
+
+        # Fetch the corresponding entry from user_table using the foreign key
+        user_entry = get_object_or_404(user_table, LOGIN=user)
+
+        return JsonResponse({'username': user.username, 'email': user_entry.email}, status=200)
+
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+
 
 
 def sendfeedback(request):
@@ -473,38 +478,16 @@ def view_nearest_traffic_notifivcation(request):
     return JsonResponse({"status":"ok","data":mdata})
 
 
-from django.http import JsonResponse
-from .models import ambulance_request_table, ambulance_table, user_table
-import datetime
 
-#
-# def user_send_ambulance_request(request):
-#     lid = request.POST['lid']  # User's login ID
-#     latitude = float(request.POST['latitude'])
-#     longitude = float(request.POST['longitude'])
-#     print(request.POST,'lateeee')
-#     user = user_table.objects.get(LOGIN_id=lid)
-#
-#     ambulances = ambulance_table.objects.all()
-#
-#
-#     for ambulance in ambulances:
-#         ambulance_request_table.objects.create(
-#             AMBULANCE_ID=ambulance,
-#             USER_ID=user,
-#             date=datetime.datetime.now(),
-#             request='Request Sent',
-#             Status='Requested',
-#             latitude=latitude,
-#             longitude=longitude,
-#         )
-#
-#     return JsonResponse({"status": "ok"})
+from .models import ambulance_request_table, ambulance_table, user_table
+
+
 
 def user_send_ambulance_request(request):
     lid = request.POST['lid']  # User's login ID
     latitude = float(request.POST['latitude'])
     longitude = float(request.POST['longitude'])
+
     user = user_table.objects.get(LOGIN_id=lid)
 
     # Check if there is already a pending request for the user
@@ -520,6 +503,7 @@ def user_send_ambulance_request(request):
     ambulance_request_table.objects.create(
         USER_ID=user,
         date=datetime.datetime.now(),
+        username=user.name,
         request='Request Sent',
         Status='Requested',
         latitude=latitude,
@@ -527,36 +511,6 @@ def user_send_ambulance_request(request):
     )
 
     return JsonResponse({"status": "ok"})
-
-
-# import datetime
-# from django.http import JsonResponse
-# from .models import user_table, ambulance_table, ambulance_request_table, location_table
-#
-#
-# def user_send_ambulance_request(request):
-#     lid = request.POST['lid']  # User's login ID
-#
-#     user = user_table.objects.get(LOGIN_id=lid)  # Fetching the user
-#     location = location_table.objects.filter(LOGIN_id=lid).order_by('-date').first()  # Get latest location
-#
-#     if not location:
-#         return JsonResponse({"status": "error", "message": "Location not found for user"})
-#
-#     ambulances = ambulance_table.objects.all()
-#
-#     for ambulance in ambulances:
-#         ambulance_request_table.objects.create(
-#             AMBULANCE_ID=ambulance,
-#             USER_ID=user,
-#             Latitude=location.Latitude,  # Storing latitude
-#             Longitude=location.Longitude,  # Storing longitude
-#             date=datetime.datetime.now(),
-#             request='Request Sent',
-#             Status='Requested'
-#         )
-#
-#     return JsonResponse({"status": "ok", "latitude": location.Latitude, "longitude": location.Longitude})
 
 
 
@@ -580,51 +534,6 @@ def send_patient_info(request):
     lob.date = datetime.datetime.today()
     lob.save()
     return JsonResponse({'task': 'ok'})
-
-
-
-# def updatelocation(request):
-#     print(request.POST)
-#     lat1 = float(request.POST['lat'])
-#     lon1 = float(request.POST['lon'])
-#     type = request.POST['type']
-#     lid = float(request.POST['lid'])
-#     ob = location_table.objects.get(LOGIN__id=lid)
-#     if type=="user":
-#             ob.LOGIN = login_table.objects.get(LOGIN__id=lid)
-#             ob.latitude = lat1
-#             ob.longitude = lon1
-#             ob.date = datetime.datetime.now()
-#             ob.save()
-#             print("111111111111111111111111")
-#             return JsonResponse({"status": "ok"})
-#     elif type == 'ambulance':
-#             ob.LOGIN = login_table.objects.get(LOGIN__id=lid)
-#             ob.latitude = lat1
-#             ob.longitude = lon1
-#             ob.date=datetime.datetime.now()
-#             ob.save()
-#             return JsonResponse({"status": "ok"})
-#     else:
-#         return JsonResponse({"status": "failed","message":"invalid"})
-#
-
-
-#
-# def updatelocation(request):
-#     print(request.POST)
-#     lat1 = float(request.POST['lat'])
-#     lon1 = float(request.POST['lon'])
-#     lid = request.POST['lid']
-#
-#     ob = location_table.objects.get(LOGIN_id=lid)
-#     ob.LOGIN = login_table.objects.get(LOGIN_id=lid)
-#     ob.latitude = lat1
-#     ob.longitude = lon1
-#     ob.date = datetime.datetime.now()
-#     ob.save()
-#     print("111111111111111111111111")
-#     return JsonResponse({"task": "valid"})
 
 
 

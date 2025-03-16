@@ -39,9 +39,7 @@ class user_table(models.Model):
     name = models.CharField(max_length=100)
     PhoneNumber=models.BigIntegerField()
     email = models.CharField(max_length=100)
-    place = models.CharField(max_length=100)
-    pin = models.IntegerField()
-    post = models.CharField(max_length=100)
+
 
 class feedback_table(models.Model):
     Feedback=models.CharField(max_length=100)
@@ -74,6 +72,7 @@ class notification_table(models.Model):
 class ambulance_request_table(models.Model):
     AMBULANCE_ID = models.ForeignKey(ambulance_table, on_delete=models.CASCADE, null=True, blank=True)
     USER_ID= models.ForeignKey(user_table,on_delete=models.CASCADE)
+    username=models.CharField(max_length=100,null=True,blank=True)
     Status = models.CharField(max_length=100)
     date=models.DateTimeField()
     request=models.CharField(max_length=100)
