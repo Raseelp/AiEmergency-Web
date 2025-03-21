@@ -367,7 +367,10 @@ def logincode(request):
         return HttpResponse(r)
 
 
-#
+
+
+
+
 # def view_nearest_ambulances(request):
 #     ob=ambulance_table.objects.all()
 #     print(ob,"HHHHHHHHHHHHHHH")
@@ -699,3 +702,43 @@ def upload_voice_message(request):
             return JsonResponse({'error': str(e)}, status=400)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+from geopy.distance import geodesic
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from geopy.distance import geodesic
+
+@csrf_exempt
+
+def calculate_distance(coord1, coord2):
+    distance = geodesic(coord1, coord2).kilometers
+    return distance
+
+def receive_user_location(request):
+    if request.method == 'POST':
+        print(request.POST)
+        try:
+            latitude = request.POST.get('latitude')
+            longitude = request.POST.get('longitude')
+
+            if latitude and longitude:
+                ob=ambulance_request_table.objects.filter(Status='Accepted')
+                for j in ob:
+                    ambulance_logins = login_table.objects.filter(type='ambulance')
+                    ambulance_locations = location_table.objects.filter(LOGIN__in=ambulance_logins).values('Latitude',
+                                                                                                           'Longitude')
+                    # print(ambulance_locations)
+                    for location in ambulance_locations:
+                        ambulance_location = (float(location['Latitude']), float(location['Longitude']))
+                        distance = calculate_distance((float(latitude),float(longitude)), ambulance_location)
+                        if distance<1000:
+                            return JsonResponse({"task":"ok"})
+                    # distance=calculate_distance((latitude,longitude),ambulance_locations)
+            else:
+
+                return JsonResponse({'task': 'na1', 'message': 'Invalid location data'})
+        except Exception as e:
+            return JsonResponse({'task': 'na2', 'message': f'Error occurred: {str(e)}'})
+
+    return JsonResponse({'task': 'na3', 'message': 'Invalid request method'})

@@ -60,6 +60,8 @@ urlpatterns = [
     path('get-username/<int:lid>/', views.get_username),
     path('delete_ambulance_request', views.delete_ambulance_request),
     path('upload_voice_message/',views.upload_voice_message),
+    path('receive_user_location/',views.receive_user_location),
+    path('calculate_distance/',views.calculate_distance),
 
 
 
