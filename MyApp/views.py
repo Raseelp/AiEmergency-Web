@@ -490,6 +490,7 @@ def user_send_ambulance_request(request):
     lid = request.POST['lid']  # User's login ID
     latitude = float(request.POST['latitude'])
     longitude = float(request.POST['longitude'])
+    bypass = request.POST.get('bypass', 'false')
 
     user = user_table.objects.get(LOGIN_id=lid)
 
@@ -501,6 +502,19 @@ def user_send_ambulance_request(request):
 
     if existing_request:
         return JsonResponse({"status": "Already Sent!"})
+
+    if bypass.lower() != 'true':
+        # Check if the location is too close to any existing requests
+        existing_requests = ambulance_request_table.objects.filter(Q(Status='Requested') | Q(Status__startswith='Accepted'))
+        new_location = (latitude, longitude)
+        duplicate_threshold = 10000  # Distance threshold in meters
+
+        for request in existing_requests:
+            existing_location = (float(request.latitude), float(request.longitude))
+            distance = calculate_distance(new_location, existing_location)
+
+            if distance <= duplicate_threshold:
+                return JsonResponse({"status": "close"})
 
     # If no existing request, create a new one
     ambulance_request_table.objects.create(
@@ -712,33 +726,124 @@ from geopy.distance import geodesic
 @csrf_exempt
 
 def calculate_distance(coord1, coord2):
-    distance = geodesic(coord1, coord2).kilometers
+    distance = geodesic(coord1, coord2).meters
     return distance
 
 def receive_user_location(request):
     if request.method == 'POST':
         print(request.POST)
-        try:
-            latitude = request.POST.get('latitude')
-            longitude = request.POST.get('longitude')
+        if True:
+            latitude = request.POST['latitude']
+            longitude = request.POST['longitude']
 
             if latitude and longitude:
-                ob=ambulance_request_table.objects.filter(Status='Accepted')
+                ob=ambulance_request_table.objects.filter(Status__istartswith='Accepted')
+
+
                 for j in ob:
-                    ambulance_logins = login_table.objects.filter(type='ambulance')
-                    ambulance_locations = location_table.objects.filter(LOGIN__in=ambulance_logins).values('Latitude',
-                                                                                                           'Longitude')
+                    kk=[j.AMBULANCE_ID.LOGIN.id]
+                    ambulance_locations = location_table.objects.filter(LOGIN__id__in=kk).values('Latitude', 'Longitude')
                     # print(ambulance_locations)
+                    print(ambulance_locations,"++++++++++++++++++++++++++++++++")
+                    print(ambulance_locations,"++++++++++++++++++++++++++++++++")
+                    print(ambulance_locations,"++++++++++++++++++++++++++++++++")
+                    print(ambulance_locations,"++++++++++++++++++++++++++++++++")
+                    print(ambulance_locations,"++++++++++++++++++++++++++++++++")
                     for location in ambulance_locations:
                         ambulance_location = (float(location['Latitude']), float(location['Longitude']))
-                        distance = calculate_distance((float(latitude),float(longitude)), ambulance_location)
-                        if distance<1000:
+                        distance = haversine((float(latitude),float(longitude)), ambulance_location)
+                        if distance<1:
                             return JsonResponse({"task":"ok"})
-                    # distance=calculate_distance((latitude,longitude),ambulance_locations)
+                        else:
+                            print('no ambulances')
             else:
-
                 return JsonResponse({'task': 'na1', 'message': 'Invalid location data'})
-        except Exception as e:
-            return JsonResponse({'task': 'na2', 'message': f'Error occurred: {str(e)}'})
 
     return JsonResponse({'task': 'na3', 'message': 'Invalid request method'})
+
+
+import math
+
+def haversine(coord1, coord2):
+    """
+    Calculate the Haversine distance between two geo-coordinates.
+    Parameters:
+        coord1 (tuple): (latitude, longitude) of the first point in decimal degrees.
+        coord2 (tuple): (latitude, longitude) of the second point in decimal degrees.
+    Returns:
+        float: Distance between the two points in kilometers.
+    """
+    # Radius of the Earth in kilometers
+    R = 6371.0
+
+    lat1, lon1 = coord1
+    lat2, lon2 = coord2
+
+    # Convert latitude and longitude from degrees to radians
+    lat1, lon1 = math.radians(lat1), math.radians(lon1)
+    lat2, lon2 = math.radians(lat2), math.radians(lon2)
+
+    # Differences in coordinates
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+
+    # Haversine formula
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    # Distance in kilometers
+    distance = R * c
+    return distance
+
+
+import requests
+from django.http import JsonResponse
+from django.conf import settings
+from django.conf import settings
+from django.http import JsonResponse
+import requests
+
+
+def medical_chatbot(request):
+    if request.method == 'POST':
+        user_message = request.POST.get('message')
+        chat_history = request.POST.get('chat_history')  # Get chat history from the request
+
+        # Construct the correct Gemini API URL with API key
+        api_url = f"{settings.GEMINI_API_URL}?key={settings.GEMINI_API_KEY}"
+
+        # Prepare the payload with chat history
+        payload = {
+            "contents": [{
+
+                 "parts": [
+            {"text": "You are a professional medical assistant. Provide accurate and helpful medical information and advice. If necessary, ask for more medical details like symptoms, duration, and medications."},
+            *[{"text": msg} for msg in json.loads(chat_history)],
+            {"text": user_message}
+        ]
+            }]
+        }
+
+        try:
+            response = requests.post(
+                api_url,
+                json=payload,
+                headers={'Content-Type': 'application/json'}
+            )
+            response.raise_for_status()
+
+            response_data = response.json()
+
+            # Extract response text
+            if 'candidates' in response_data and len(response_data['candidates']) > 0:
+                bot_response = response_data['candidates'][0]['content']['parts'][0]['text']
+                return JsonResponse({"response": bot_response})
+            else:
+                return JsonResponse({"error": "No response from Gemini"}, status=500)
+
+        except requests.exceptions.RequestException as e:
+            return JsonResponse({"error": f"API request failed: {str(e)}"}, status=500)
+        except Exception as e:
+            return JsonResponse({"error": f"Unexpected error: {str(e)}"}, status=500)
+
+    return JsonResponse({"error": "Invalid request method"}, status=400)

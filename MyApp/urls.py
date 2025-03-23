@@ -62,6 +62,8 @@ urlpatterns = [
     path('upload_voice_message/',views.upload_voice_message),
     path('receive_user_location/',views.receive_user_location),
     path('calculate_distance/',views.calculate_distance),
+    path('haversine/',views.haversine),
+    path('medical_chatbot',views.medical_chatbot),
 
 
 
